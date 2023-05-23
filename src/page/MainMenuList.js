@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SecondLayerMenuModal from "./SecondLayerMenuModal";
 import SecondLayerMenuTable from "./SecondLayerMenuTable";
+import { firstLayerMenu } from "./api/action";
 
 const MainMenuList = () => {
   const [menuList, setMenuList] = useState([]);
   const location = useLocation();
-  const [menuId,setMenuId]=useState('')
+  const [menuId, setMenuId] = useState("");
 
+  const getMenu = () => {
+    firstLayerMenu(location.state, setMenuList);
+  };
   useEffect(() => {
-    fetch(
-      `http://localhost:8080/api/v1/routelisttwo/permission?email=${location?.state}`
-    )
-      .then((res) => res.json())
-      .then((data) => setMenuList(data?.data));
+    getMenu();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location?.state]);
 
   const userWiseFirstMenuPermission = (id) => {
@@ -23,15 +24,18 @@ const MainMenuList = () => {
       method: "PATCH",
     })
       .then((res) => res.json())
-      .then((data) => console.log(data, "data"));
+      .then((data) => {
+        getMenu();
+      });
   };
-
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
   return (
     <div className="bg-white h-screen container mx-auto p-10">
-      <h1 className="text-green-600 font-bold text-2xl underline">First Layer Menu({menuList.length})</h1>
+      <h1 className="text-green-600 font-bold text-2xl underline">
+        First Layer Menu({menuList.length})
+      </h1>
       <input
         className=" border-[1px] border-gray-400 rounded-md ml-auto block my-3 px-3 py-[5px] min-w-[250px]"
         placeholder="Search user"
@@ -93,9 +97,8 @@ const MainMenuList = () => {
                   {item?.isActive ? (
                     <span
                       onClick={() => {
-                        setIsOpen(true)
-                        setMenuId(item?._id)
-
+                        setIsOpen(true);
+                        setMenuId(item?._id);
                       }}
                       className="bg-green-700 cursor-pointer text-white text-[12px] font-semibold px-5 py-[2px] rounded-[3px]"
                     >
@@ -110,11 +113,8 @@ const MainMenuList = () => {
           </tbody>
         </table>
       </div>
-      <SecondLayerMenuModal
-       modalIsOpen={modalIsOpen}
-       setIsOpen={setIsOpen}
-      >
-        <SecondLayerMenuTable  menuId={menuId} />
+      <SecondLayerMenuModal modalIsOpen={modalIsOpen} setIsOpen={setIsOpen}>
+        <SecondLayerMenuTable menuId={menuId} />
       </SecondLayerMenuModal>
     </div>
   );
