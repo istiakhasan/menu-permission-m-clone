@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { getSecondLayerMenu } from "./api/action";
 
 const SecondLayerMenuTable = ({ menuId }) => {
-  const [subMenuList, seSubMenuList] = useState([]);
+  const [subMenuList, setSubMenuList] = useState([]);
   const location = useLocation();
+
+  const getGrid = () => {
+    getSecondLayerMenu(menuId, location.state, setSubMenuList);
+  };
   useEffect(() => {
-    const url = `http://localhost:8080/api/v1/routelisttwo/secondlayer/?id=${menuId}&email=${location.state}`;
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => seSubMenuList(data?.data[0]));
+    getGrid();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location?.state, menuId]);
 
   const userWiseSecondMenuPermission = (id) => {
     const url = `http://localhost:8080/api/v1/routelisttwo/secondlayer/permission/?id=${menuId}&email=${location.state}&secondLayerId=${id}`;
-    console.log(url);
     fetch(url, {
       method: "PATCH",
     })
       .then((res) => res.json())
-      .then((data) => console.log(data, "data"));
+      .then((data) => {
+        if(data.status){
+          getGrid();
+        }
+      });
   };
-  console.log(subMenuList, "location");
+  console.log(subMenuList,"sub menu");
   return (
     <div className="bg-white container mx-auto">
+      <h1 className="text-green-600 font-bold text-2xl underline">Sub  Menu({subMenuList?.children?.length})</h1>
       <input
         className=" border-[1px] border-gray-400 rounded-md ml-auto block my-3 px-3 py-[5px] min-w-[250px]"
         placeholder="Search user"
@@ -45,7 +52,6 @@ const SecondLayerMenuTable = ({ menuId }) => {
               <th scope="col" className="px-6 py-3 text-center">
                 Action
               </th>
-
             </tr>
           </thead>
           <tbody>
@@ -58,14 +64,14 @@ const SecondLayerMenuTable = ({ menuId }) => {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800"
                 >
-                  {i + 1}
+                  {item?.id}
                 </th>
                 <td className="px-6 py-4">{item?.title}</td>
                 <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
                   {location.state}
                 </td>
                 <td className="px-6 py-4 text-center">
-                  {item?.isActive ? (
+                  {item?.isTrue ? (
                     <span className="bg-green-700 cursor-pointer text-white text-[12px] font-semibold px-5 py-[2px] rounded-[3px]">
                       Active
                     </span>
@@ -78,7 +84,6 @@ const SecondLayerMenuTable = ({ menuId }) => {
                     </span>
                   )}
                 </td>
-
               </tr>
             ))}
           </tbody>

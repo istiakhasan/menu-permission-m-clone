@@ -31,6 +31,7 @@ const MainMenuList = () => {
 
   return (
     <div className="bg-white h-screen container mx-auto p-10">
+      <h1 className="text-green-600 font-bold text-2xl underline">First Layer Menu({menuList.length})</h1>
       <input
         className=" border-[1px] border-gray-400 rounded-md ml-auto block my-3 px-3 py-[5px] min-w-[250px]"
         placeholder="Search user"
