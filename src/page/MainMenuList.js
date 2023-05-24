@@ -32,7 +32,7 @@ const MainMenuList = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="bg-white h-screen container mx-auto p-10">
+    <div className="bg-white h-screen container mx-auto ">
       <h1 className="text-green-600 font-bold text-2xl underline">
         First Layer Menu({menuList.length})
       </h1>
