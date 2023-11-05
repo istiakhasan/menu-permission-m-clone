@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getAllBranches } from "../api/action";
+import { useNavigate } from "react-router-dom";
 
 const BusinessUnitList = () => {
   const [branchs, setBranches] = useState([]);
+  const navigate=useNavigate()
   useEffect(() => {
     getAllBranches(setBranches, () => {
       console.log("fetch successfully");
     });
   }, []);
+
+
+
   return (
     <div className="bg-white h-screen container mx-auto p-10">
       <div className="flex justify-between items-center">
@@ -15,7 +20,7 @@ const BusinessUnitList = () => {
           Business Unit List({branchs?.length})
         </h1>
 
-        <button className="bg-green-800  text-white font-semibold text-[12px] px-4 py-1 rounded-[3px] uppercase">
+        <button  onClick={()=>navigate('/business/unit/create')} className="bg-green-800  text-white font-semibold text-[12px] px-4 py-1 rounded-[3px] uppercase">
           + Create Branch
         </button>
       </div>
@@ -64,7 +69,14 @@ const BusinessUnitList = () => {
                   {branch?.value}
                 </td>
                 <td className="text-center">
-                  <span
+                  <span 
+                   onClick={()=>{
+                    setBranches([])
+                    fetch(`http://localhost:8080/api/v1/branch/?id=${branch?._id}&email=${branch?.accountOwnerEmail}`,{
+                      method:"DELETE"
+                    })
+                    getAllBranches(setBranches)
+                   }}
                     title="under construction "
                     className="bg-red-500 text-white text-[12px] font-semibold cursor-pointer px-3 rounded-[4px] py-[2px]"
                   >

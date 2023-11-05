@@ -14,12 +14,11 @@ export const getSecondLayerMenu = async (menuId, email, setter) => {
   }
 };
 
-
-export const getAllBranches=(setter,cb)=>{
-  fetch('http://localhost:8080/api/v1/branch/allbranch')
-  .then(res=>res.json())
-  .then(data=>{
-    setter(data?.data)
-    cb()
-  })
-}
+export const getAllBranches = (setter, cb) => {
+  fetch("http://localhost:8080/api/v1/branch/allbranch")
+    .then((res) => res.json())
+    .then((data) => {
+      setter(data?.data);
+      cb && cb();
+    });
+};

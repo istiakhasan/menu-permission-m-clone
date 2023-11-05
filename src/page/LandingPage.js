@@ -1,21 +1,56 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDebounced } from "../hooks/useDebounced";
+import Refresh from "../assets/refresh.png";
 const LandingPage = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   const [users, setUser] = useState([]);
   const navigate = useNavigate();
+  const [rotation, setRotation] = useState(0);
+
+  const handleClick = () => {
+    setRotation(rotation + 180);
+    setSearchTerm("");
+  };
+  const debouncedTerm = useDebounced({
+    searchQuery: searchTerm,
+    delay: 600,
+  });
   useEffect(() => {
-    fetch("http://localhost:8080/api/v1/user")
+    fetch(`http://localhost:8080/api/v1/user?searchTerm=${debouncedTerm}`)
       .then((res) => res.json())
       .then((data) => setUser(data?.data));
-  }, []);
+  }, [debouncedTerm]);
   return (
     <div className="bg-white h-screen container mx-auto p-10">
-      <h1 className="text-green-600 font-bold text-2xl underline">All Authentic Users({users.length})</h1>
-      <input
-        className=" border-[1px] border-gray-400 rounded-md ml-auto block my-3 px-3 py-[5px] min-w-[250px]"
-        placeholder="Search user"
-        type="text"
-      />
+      <h1 className="text-green-600 font-bold text-2xl underline">
+        All Authentic Users({users.length})
+      </h1>
+      <div className="flex items-center justify-between">
+        <input
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className=" border-[1px] border-gray-400 rounded-md  my-3 px-3 py-[5px] min-w-[250px]"
+          placeholder="Search user"
+          type="text"
+        />
+        <button
+          onClick={handleClick}
+          className="flex text-sm text-white bg-green-700 font-semibold  items-center gap-3 border-[1px] rounded-md border-gray-400 px-5 py-2"
+        >
+          {"Reset "}
+          <img
+            style={{
+              transition: ".5s ease",
+              transform: `rotate(${rotation}deg)`,
+            }}
+            id="img"
+            className="h-4 w-4 cursor-pointer"
+            src={Refresh}
+            alt=""
+          />
+        </button>
+      </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-gray-400">

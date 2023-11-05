@@ -26,6 +26,18 @@ const SecondLayerMenuTable = ({ menuId }) => {
         }
       });
   };
+  const RemoveuserWiseSecondMenuPermission = (id) => {
+    const url = `http://localhost:8080/api/v1/routelisttwo/remove-secondlayer/permission/?id=${menuId}&email=${location.state}&secondLayerId=${id}`;
+    fetch(url, {
+      method: "PATCH",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if(data.status){
+          getGrid();
+        }
+      });
+  };
   console.log(subMenuList,"sub menu");
   return (
     <div className="bg-white container mx-auto">
@@ -72,7 +84,7 @@ const SecondLayerMenuTable = ({ menuId }) => {
                 </td>
                 <td className="px-6 py-4 text-center">
                   {item?.isTrue ? (
-                    <span className="bg-green-700 cursor-pointer text-white text-[12px] font-semibold px-5 py-[2px] rounded-[3px]">
+                    <span onClick={() => RemoveuserWiseSecondMenuPermission(item?.id)} className="bg-green-700 cursor-pointer text-white text-[12px] font-semibold px-5 py-[2px] rounded-[3px]">
                       Active
                     </span>
                   ) : (

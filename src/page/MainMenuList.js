@@ -28,6 +28,17 @@ const MainMenuList = () => {
         getMenu();
       });
   };
+  const userWiseRemoveMenuPermission = (id) => {
+    const url = `http://localhost:8080/api/v1/routelisttwo/remove-first-layer/permission/${id}?email=${location.state}`;
+    console.log(url);
+    fetch(url, {
+      method: "PATCH",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        getMenu();
+      });
+  };
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -81,7 +92,7 @@ const MainMenuList = () => {
                 </td>
                 <td className="px-6 py-4 text-center">
                   {item?.isActive ? (
-                    <span className="bg-green-700 cursor-pointer text-white text-[12px] font-semibold px-5 py-[2px] rounded-[3px]">
+                    <span onClick={() => userWiseRemoveMenuPermission(item?._id)} className="bg-green-700 cursor-pointer text-white text-[12px] font-semibold px-5 py-[2px] rounded-[3px]">
                       Active
                     </span>
                   ) : (
