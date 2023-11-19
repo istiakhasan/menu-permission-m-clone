@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDebounced } from "../hooks/useDebounced";
 import Refresh from "../assets/refresh.png";
+import { getBaseUrl } from "../helpers/config/envConfig";
 const LandingPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUser] = useState([]);
@@ -17,7 +18,7 @@ const LandingPage = () => {
     delay: 600,
   });
   useEffect(() => {
-    fetch(`http://localhost:8080/api/v1/user?searchTerm=${debouncedTerm}`)
+    fetch(`${getBaseUrl()}/user?searchTerm=${debouncedTerm}`)
       .then((res) => res.json())
       .then((data) => setUser(data?.data));
   }, [debouncedTerm]);

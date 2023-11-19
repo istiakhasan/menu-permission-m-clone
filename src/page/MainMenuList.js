@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import SecondLayerMenuModal from "./SecondLayerMenuModal";
 import SecondLayerMenuTable from "./SecondLayerMenuTable";
 import { firstLayerMenu } from "./api/action";
+import { getBaseUrl } from "../helpers/config/envConfig";
 
 const MainMenuList = () => {
   const [menuList, setMenuList] = useState([]);
@@ -18,8 +19,7 @@ const MainMenuList = () => {
   }, [location?.state]);
 
   const userWiseFirstMenuPermission = (id) => {
-    const url = `http://localhost:8080/api/v1/routelisttwo/permission/${id}?email=${location.state}`;
-    console.log(url);
+    const url = `${getBaseUrl()}/routelisttwo/permission/${id}?email=${location.state}`;
     fetch(url, {
       method: "PATCH",
     })
@@ -29,8 +29,7 @@ const MainMenuList = () => {
       });
   };
   const userWiseRemoveMenuPermission = (id) => {
-    const url = `http://localhost:8080/api/v1/routelisttwo/remove-first-layer/permission/${id}?email=${location.state}`;
-    console.log(url);
+    const url = `${getBaseUrl()}/routelisttwo/remove-first-layer/permission/${id}?email=${location.state}`;
     fetch(url, {
       method: "PATCH",
     })

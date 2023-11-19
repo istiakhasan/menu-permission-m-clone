@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getSecondLayerMenu } from "./api/action";
+import { getBaseUrl } from "../helpers/config/envConfig";
 
 const SecondLayerMenuTable = ({ menuId }) => {
   const [subMenuList, setSubMenuList] = useState([]);
@@ -15,7 +16,7 @@ const SecondLayerMenuTable = ({ menuId }) => {
   }, [location?.state, menuId]);
 
   const userWiseSecondMenuPermission = (id) => {
-    const url = `http://localhost:8080/api/v1/routelisttwo/secondlayer/permission/?id=${menuId}&email=${location.state}&secondLayerId=${id}`;
+    const url = `${getBaseUrl()}/routelisttwo/secondlayer/permission/?id=${menuId}&email=${location.state}&secondLayerId=${id}`;
     fetch(url, {
       method: "PATCH",
     })
@@ -27,7 +28,7 @@ const SecondLayerMenuTable = ({ menuId }) => {
       });
   };
   const RemoveuserWiseSecondMenuPermission = (id) => {
-    const url = `http://localhost:8080/api/v1/routelisttwo/remove-secondlayer/permission/?id=${menuId}&email=${location.state}&secondLayerId=${id}`;
+    const url = `${getBaseUrl()}/routelisttwo/remove-secondlayer/permission/?id=${menuId}&email=${location.state}&secondLayerId=${id}`;
     fetch(url, {
       method: "PATCH",
     })
@@ -38,7 +39,6 @@ const SecondLayerMenuTable = ({ menuId }) => {
         }
       });
   };
-  console.log(subMenuList,"sub menu");
   return (
     <div className="bg-white container mx-auto">
       <h1 className="text-green-600 font-bold text-2xl underline">Sub  Menu({subMenuList?.children?.length})</h1>

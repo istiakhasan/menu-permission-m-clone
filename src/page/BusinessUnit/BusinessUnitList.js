@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getAllBranches } from "../api/action";
 import { useNavigate } from "react-router-dom";
+import { getBaseUrl } from "../../helpers/config/envConfig";
 
 const BusinessUnitList = () => {
   const [branchs, setBranches] = useState([]);
   const navigate=useNavigate()
   useEffect(() => {
     getAllBranches(setBranches, () => {
-      console.log("fetch successfully");
     });
   }, []);
 
@@ -72,7 +72,7 @@ const BusinessUnitList = () => {
                   <span 
                    onClick={()=>{
                     setBranches([])
-                    fetch(`http://localhost:8080/api/v1/branch/?id=${branch?._id}&email=${branch?.accountOwnerEmail}`,{
+                    fetch(`${getBaseUrl()}/branch/?id=${branch?._id}&email=${branch?.accountOwnerEmail}`,{
                       method:"DELETE"
                     })
                     getAllBranches(setBranches)

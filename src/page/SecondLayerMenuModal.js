@@ -11,9 +11,9 @@ const SecondLayerMenuModal = ({children,modalIsOpen,setIsOpen}) => {
         },
       };
 
-    function openModal() {
-      setIsOpen(true);
-    }
+    // function openModal() {
+    //   setIsOpen(true);
+    // }
     function closeModal() {
       setIsOpen(false);
     }
